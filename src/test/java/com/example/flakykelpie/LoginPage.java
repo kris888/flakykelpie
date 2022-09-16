@@ -14,4 +14,5 @@ public class LoginPage {
     public SelenideElement botLogin = $x("//div[@class='bot_column']");
     public SelenideElement currentPageStyle = $("#page_wrapper");
 
+    public SelenideElement logoutButton =$x("//a[contains(@id,'link')][@class='bm-item menu-item'][contains(.,'Logout')]");
 }
