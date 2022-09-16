@@ -1,12 +1,10 @@
 package com.example.flakykelpie;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.*;
+import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
@@ -24,28 +22,45 @@ public class LoginPageTest {
     }
 
     @Test
-    public void login() {
+    public void loginPageDesign() {
+        loginPage.logoLogin.shouldBe(visible);
+        loginPage.botLogin.shouldBe(visible);
+        loginPage.loginButton.shouldBe(visible);
+    }
+    @Test
+    public void errorMessageEmptyCredentials() {
+        loginPage.errorMessage.shouldBe(visible);
         loginPage.loginButton.click();
+      //  $x("//input[contains(@id,'login-button')]").click();
+        assertTimeout(Duration.ofMillis(30000), ()->{} );
 
-//        $("[data-test='search-input']").sendKeys("Selenium");
-//        $("button[data-test='full-search-button']").click();
-        $x("//input[contains(@id,'login-button')]");
-        ;
+        $x("//h3[contains(.,'Epic sadface: Username is required')]").shouldBe(visible);
     }
 
-//    @Test
-//    public void toolsMenu() {
-//        loginPage.toolsMenu.click();
-//
-//        $("div[data-test='main-submenu']").shouldBe(visible);
-//    }
-//
-//    @Test
-//    public void navigationToAllTools() {
-//        loginPage.seeAllToolsButton.click();
-//
-//        $("#products-page").shouldBe(visible);
-//
-//        assertEquals("All Developer Tools and Products by JetBrains", Selenide.title());
-//    }
+  @Test
+   public void loginAccepted() {
+        loginPage.userName.click();
+        loginPage.password.click();
+      $x("//input[contains(@id,'user-name')]").shouldBe(visible);
+      $x("//input[@id='password']").shouldBe(visible);
+
+      $x("//input[contains(@id,'user-name')]").sendKeys("standard_user");
+      $x("//input[@id='password']").sendKeys("secret_sauce");
+      loginPage.loginButton.click();
+      assertTimeout(Duration.ofMillis(30000), ()->{} );
+      loginPage.currentPageStyle.shouldBe(visible);
+ }
+ @Test
+         public void loginLockedOutUser()
+ {
+     loginPage.userName.click();
+     loginPage.password.click();
+     $x("//input[contains(@id,'user-name')]").shouldBe(visible);
+     $x("//input[@id='password']").shouldBe(visible);
+     $x("//input[contains(@id,'user-name')]").sendKeys("locked_out_user");
+     $x("//input[@id='password']").sendKeys("secret_sauce");
+     loginPage.loginButton.click();
+     assertTimeout(Duration.ofMillis(30000), ()->{} );
+     $x("//h3[@data-test='error'][contains(.,'Epic sadface: Sorry, this user has been locked out.')]").shouldBe(visible);
+ }
 }
