@@ -27,4 +27,6 @@ public class ProductsPage {
     public SelenideElement checkoutButtonProduct = $x("//*[@id=\"checkout\"]");
     public SelenideElement checkoutButtonProduct1 = $x("//*[@id=\"continue\"]");
     public SelenideElement checkoutButtonProductError = $x("//h3[@data-test='error'][contains(.,'Error: First Name is required')]");
+    public SelenideElement resetAppStateButton = $x("//a[contains(@id,'link')][@class='bm-item menu-item'][contains(.,'Reset App State')]");
+
 }

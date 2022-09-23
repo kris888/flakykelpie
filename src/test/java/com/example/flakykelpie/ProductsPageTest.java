@@ -6,8 +6,7 @@ import org.junit.jupiter.api.*;
 import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$x;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 public class ProductsPageTest {
@@ -23,6 +22,7 @@ public class ProductsPageTest {
     public void setUp() {
         open("https://www.saucedemo.com/");
     }
+    //standard user tests
     @Test
     public void validatePageStylesStandardUser(){
         loginPage.userName.click();
@@ -122,9 +122,220 @@ public class ProductsPageTest {
         $x("//button[contains(.,'Finish')]").shouldBe(visible).click();
         $x("//img[contains(@alt,'Pony Express')]").shouldBe(visible);
     }
-    @AfterAll
-    public static void loggedOutUser(){
+    //performance glitch user tests
+    @Test
+    public void validatePageStylesPerformanceGlitchUser(){
+        loginPage.userName.click();
+        loginPage.password.click();
+        $x("//input[contains(@id,'user-name')]").shouldBe(visible);
+        $x("//input[@id='password']").shouldBe(visible);
+
+        $x("//input[contains(@id,'user-name')]").sendKeys("performance_glitch_user");
+        $x("//input[@id='password']").sendKeys("secret_sauce");
+        loginPage.loginButton.click();
+        assertTimeout(Duration.ofMillis(30000), ()->{} );
+        loginPage.currentPageStyle.shouldBe(visible);
+        productsPage.errorMessage.shouldNotBe(Condition.visible);
+        productsPage.productsText.shouldBe(Condition.visible);
+        productsPage.inventoryContainer.shouldBe(Condition.visible);
+        productsPage.inventoryItem.shouldBe(Condition.visible);
+        productsPage.inventoryItemImg.shouldBe(Condition.visible);
+        productsPage.inventoryItemPriceFlexItem.shouldBe(Condition.visible);
+        productsPage.inventoryItemName.shouldBe(Condition.visible);
+        productsPage.inventoryItemDesc.shouldBe(Condition.visible);
+        productsPage.addToCartButton.shouldBe(Condition.visible);
+        productsPage.productSortContainer.shouldBe(visible);
+    }
+    @Test
+
+    public  void sortProductsPerformanceGlitchUser(){
+        loginPage.userName.click();
+        loginPage.password.click();
+        $x("//input[contains(@id,'user-name')]").shouldBe(visible);
+        $x("//input[@id='password']").shouldBe(visible);
+
+        $x("//input[contains(@id,'user-name')]").sendKeys("performance_glitch_user");
+        $x("//input[@id='password']").sendKeys("secret_sauce");
+        loginPage.loginButton.click();
+        assertTimeout(Duration.ofMillis(30000), ()->{} );
+        loginPage.currentPageStyle.shouldBe(visible);
+        productsPage.errorMessage.shouldNotBe(Condition.visible);
+        productsPage.productsText.shouldBe(Condition.visible);
         $x("//button[contains(.,'Open Menu')]").shouldBe(visible).click();
+        productsPage.resetAppStateButton.click();
+        productsPage.productSortContainer.shouldBe(visible).click();
+        productsPage.selectSortContainerOption2.click();
+        productsPage.testAllTheThings.shouldBe(visible).click();
+        productsPage.testAllTheThingsImage.shouldBe(visible);
+        productsPage.buttonBackToProducts.shouldBe(visible).click();
+    }
+    @Test
+    public  void orderProductsPerformanceGlitchUser(){
+        loginPage.userName.click();
+        loginPage.password.click();
+        $x("//input[contains(@id,'user-name')]").shouldBe(visible);
+        $x("//input[@id='password']").shouldBe(visible);
+
+        $x("//input[contains(@id,'user-name')]").sendKeys("performance_glitch_user");
+        $x("//input[@id='password']").sendKeys("secret_sauce");
+        loginPage.loginButton.click();
+        assertTimeout(Duration.ofMillis(30000), ()->{} );
+        loginPage.currentPageStyle.shouldBe(visible);
+        productsPage.errorMessage.shouldNotBe(Condition.visible);
+        productsPage.productsText.shouldBe(Condition.visible);
+        $x("//button[contains(.,'Open Menu')]").shouldBe(visible).click();
+        productsPage.resetAppStateButton.click();
+        productsPage.productSortContainer.shouldBe(visible).click();
+        productsPage.selectSortContainerOption2.click();
+        productsPage.testAllTheThings.shouldBe(visible).click();
+        productsPage.testAllTheThingsImage.shouldBe(visible);
+        productsPage.addToCardProduct.shouldBe(visible).click();
+        productsPage.basketProducts.shouldBe(visible).click();
+    }
+    @Test
+    public  void checkoutProductsPerformanceGlitchUser(){
+        loginPage.userName.click();
+        loginPage.password.click();
+        $x("//input[contains(@id,'user-name')]").shouldBe(visible);
+        $x("//input[@id='password']").shouldBe(visible);
+
+        $x("//input[contains(@id,'user-name')]").sendKeys("performance_glitch_user");
+        $x("//input[@id='password']").sendKeys("secret_sauce");
+        loginPage.loginButton.click();
+        assertTimeout(Duration.ofMillis(30000), ()->{} );
+        productsPage.errorMessage.shouldNotBe(Condition.visible);
+        productsPage.productsText.shouldBe(Condition.visible);
+        $x("//button[contains(.,'Open Menu')]").shouldBe(visible).click();
+        productsPage.resetAppStateButton.click();
+        productsPage.productSortContainer.shouldBe(visible).click();
+        productsPage.selectSortContainerOption2.click();
+        productsPage.testAllTheThings.shouldBe(visible).click();
+        productsPage.testAllTheThingsImage.shouldBe(visible);
+        productsPage.addToCardProduct.shouldBe(visible);
+        productsPage.addToCardProduct.shouldBe(visible).click();
+        productsPage.basketProducts.shouldBe(visible).click();
+        productsPage.removeProduct.shouldBe(visible);
+        productsPage.checkoutButtonProduct.shouldBe(visible).click();
+        productsPage.checkoutButtonProduct1.click();
+        productsPage.checkoutButtonProductError.shouldBe(visible);
+        $x("//input[contains(@placeholder,'First Name')]\n").shouldBe(visible).sendKeys("test");
+        $x("//input[contains(@placeholder,'Last Name')]\n").shouldBe(visible).sendKeys("test");
+
+        $x("//input[contains(@placeholder,'Zip/Postal Code')]").shouldBe(visible).sendKeys("test");
+        productsPage.checkoutButtonProduct1.shouldBe(visible).click();
+        $x("//div[@class='summary_total_label'][contains(.,'Total: $17.27')]").shouldBe(visible);
+        $x("//button[contains(.,'Finish')]").shouldBe(visible).click();
+        $x("//img[contains(@alt,'Pony Express')]").shouldBe(visible);
+    }
+    //problem user tests
+    @Test
+    public void validateStylesProblemUser(){
+        loginPage.userName.click();
+        loginPage.password.click();
+        $x("//input[contains(@id,'user-name')]").shouldBe(visible);
+        $x("//input[@id='password']").shouldBe(visible);
+
+        $x("//input[contains(@id,'user-name')]").sendKeys("problem_user");
+        $x("//input[@id='password']").sendKeys("secret_sauce");
+        loginPage.loginButton.click();
+        assertTimeout(Duration.ofMillis(30000), ()->{} );
+        loginPage.currentPageStyle.shouldBe(visible);
+        productsPage.errorMessage.shouldNotBe(Condition.visible);
+        productsPage.productsText.shouldBe(Condition.visible);
+        productsPage.inventoryContainer.shouldBe(Condition.visible);
+        productsPage.inventoryItem.shouldBe(Condition.visible);
+        productsPage.inventoryItemImg.shouldBe(Condition.visible);
+        productsPage.inventoryItemPriceFlexItem.shouldBe(Condition.visible);
+        productsPage.inventoryItemName.shouldBe(Condition.visible);
+        productsPage.inventoryItemDesc.shouldBe(Condition.visible);
+        productsPage.addToCartButton.shouldBe(Condition.visible);
+        productsPage.productSortContainer.shouldBe(visible);
+    }
+    @Test
+
+    public  void sortProductsProblemUser(){
+        loginPage.userName.click();
+        loginPage.password.click();
+        $x("//input[contains(@id,'user-name')]").shouldBe(visible);
+        $x("//input[@id='password']").shouldBe(visible);
+
+        $x("//input[contains(@id,'user-name')]").sendKeys("problem_user");
+        $x("//input[@id='password']").sendKeys("secret_sauce");
+        loginPage.loginButton.click();
+        assertTimeout(Duration.ofMillis(30000), ()->{} );
+        loginPage.currentPageStyle.shouldBe(visible);
+        productsPage.errorMessage.shouldNotBe(Condition.visible);
+        productsPage.productsText.shouldBe(Condition.visible);
+        $x("//button[contains(.,'Open Menu')]").shouldBe(visible).click();
+        productsPage.resetAppStateButton.click();
+        productsPage.productSortContainer.shouldBe(visible).click();
+        productsPage.selectSortContainerOption2.click();
+        productsPage.testAllTheThings.shouldBe(visible).click();
+        productsPage.testAllTheThingsImage.shouldBe(visible);
+        productsPage.buttonBackToProducts.shouldBe(visible).click();
+    }
+    @Test
+    public  void orderProductsProblemUser(){
+        loginPage.userName.click();
+        loginPage.password.click();
+        $x("//input[contains(@id,'user-name')]").shouldBe(visible);
+        $x("//input[@id='password']").shouldBe(visible);
+
+        $x("//input[contains(@id,'user-name')]").sendKeys("problem_user");
+        $x("//input[@id='password']").sendKeys("secret_sauce");
+        loginPage.loginButton.click();
+        assertTimeout(Duration.ofMillis(30000), ()->{} );
+        loginPage.currentPageStyle.shouldBe(visible);
+        productsPage.errorMessage.shouldNotBe(Condition.visible);
+        productsPage.productsText.shouldBe(Condition.visible);
+        $x("//button[contains(.,'Open Menu')]").shouldBe(visible).click();
+        productsPage.resetAppStateButton.click();
+        productsPage.productSortContainer.shouldBe(visible).click();
+        productsPage.selectSortContainerOption2.click();
+        productsPage.testAllTheThings.shouldBe(visible).click();
+        productsPage.testAllTheThingsImage.shouldBe(visible);
+        productsPage.addToCardProduct.shouldBe(visible).click();
+        productsPage.basketProducts.shouldBe(visible).click();
+    }
+    @Test
+    public  void checkoutProductsProblemUser(){
+        loginPage.userName.click();
+        loginPage.password.click();
+        $x("//input[contains(@id,'user-name')]").shouldBe(visible);
+        $x("//input[@id='password']").shouldBe(visible);
+
+        $x("//input[contains(@id,'user-name')]").sendKeys("problem_user");
+        $x("//input[@id='password']").sendKeys("secret_sauce");
+        loginPage.loginButton.click();
+        assertTimeout(Duration.ofMillis(30000), ()->{} );
+        productsPage.errorMessage.shouldNotBe(Condition.visible);
+        productsPage.productsText.shouldBe(Condition.visible);
+        $x("//button[contains(.,'Open Menu')]").shouldBe(visible).click();
+        productsPage.resetAppStateButton.click();
+        productsPage.productSortContainer.shouldBe(visible).click();
+        productsPage.selectSortContainerOption2.click();
+        productsPage.testAllTheThings.shouldBe(visible).click();
+        productsPage.testAllTheThingsImage.shouldBe(visible);
+        productsPage.addToCardProduct.shouldBe(visible);
+        productsPage.addToCardProduct.shouldBe(visible).click();
+        productsPage.basketProducts.shouldBe(visible).click();
+        productsPage.removeProduct.shouldBe(visible);
+        productsPage.checkoutButtonProduct.shouldBe(visible).click();
+        productsPage.checkoutButtonProduct1.click();
+        productsPage.checkoutButtonProductError.shouldBe(visible);
+        $x("//input[contains(@placeholder,'First Name')]\n").shouldBe(visible).sendKeys("test");
+        $x("//input[contains(@placeholder,'Last Name')]\n").shouldBe(visible).sendKeys("test");
+
+        $x("//input[contains(@placeholder,'Zip/Postal Code')]").shouldBe(visible).sendKeys("test");
+        productsPage.checkoutButtonProduct1.shouldBe(visible).click();
+        $x("//div[@class='summary_total_label'][contains(.,'Total: $17.27')]").shouldBe(visible);
+        $x("//button[contains(.,'Finish')]").shouldBe(visible).click();
+        $x("//img[contains(@alt,'Pony Express')]").shouldBe(visible);
+    }
+    @AfterEach
+    public void loggedOutUser(){
+        $x("//button[contains(.,'Open Menu')]").shouldBe(visible).click();
+        //productsPage.resetAppStateButton.click();
         loginPage.logoutButton.click();
         assertTimeout(Duration.ofMillis(1000000), () -> {
         });
@@ -133,6 +344,5 @@ public class ProductsPageTest {
         loginPage.loginButton.shouldBe(visible);
         open("https://www.saucedemo.com/inventory.html");
         productsPage.errorMessage.shouldBe(Condition.visible);
-
     }
 }
